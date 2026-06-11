@@ -46,6 +46,111 @@
     font-size: 12px; color: var(--text-dim); pointer-events: none; user-select: none;
   }
 
+  /* ---- Singmaster notation (under the cube) ---- */
+  #notation {
+    position: fixed; bottom: 56px; left: 50%; transform: translateX(-50%); z-index: 10;
+    width: min(620px, calc(100vw - 360px));
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 14px;
+    padding: 12px 16px;
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: 0 14px 40px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06);
+    user-select: none;
+  }
+  .nt-row { display: flex; align-items: baseline; gap: 10px; }
+  .nt-row + .nt-row { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--panel-border); }
+  .nt-key {
+    flex: 0 0 64px; font-size: 10px; font-weight: 700; letter-spacing: .8px;
+    text-transform: uppercase; color: var(--text-dim);
+  }
+  .nt-seq {
+    flex: 1; min-height: 17px;
+    font-family: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 13px; line-height: 1.45; letter-spacing: .5px;
+    color: var(--text); word-spacing: 3px; overflow-wrap: anywhere;
+  }
+  .nt-move { transition: color .15s ease; }
+  .nt-move.active {
+    color: var(--accent-bright); font-weight: 700;
+    text-shadow: 0 0 10px rgba(63,185,80,.65);
+  }
+  .nt-caret {
+    display: inline-block; width: 1px; margin-left: 1px;
+    border-right: 2px solid var(--accent-bright);
+    animation: nt-blink 1s steps(1) infinite;
+  }
+  @keyframes nt-blink { 50% { opacity: 0; } }
+  .nt-done { color: var(--accent-bright); font-weight: 700; }
+
+  .nt-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .nt-title {
+    font-size: 10px; font-weight: 700; letter-spacing: .8px;
+    text-transform: uppercase; color: var(--text-dim);
+  }
+  .nt-icon {
+    flex: 0 0 auto; width: 18px; height: 18px; border-radius: 50%; cursor: pointer;
+    background: rgba(255,255,255,.08); border: 1px solid var(--panel-border);
+    color: var(--text-dim); font-size: 11px; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: color .15s, background .15s;
+  }
+  .nt-icon:hover, .nt-icon:focus-visible { color: var(--text); background: rgba(255,255,255,.14); outline: none; }
+  .nt-copy {
+    flex: 0 0 auto; align-self: center; width: 26px; height: 26px; border-radius: 8px; cursor: pointer;
+    background: rgba(255,255,255,.05); border: 1px solid var(--panel-border); color: var(--text-dim);
+    display: inline-flex; align-items: center; justify-content: center; position: relative;
+    transition: color .15s, background .15s, border-color .15s;
+  }
+  .nt-copy:hover { color: var(--text); background: rgba(255,255,255,.12); }
+  .nt-copy svg { width: 13px; height: 13px; fill: currentColor; }
+  .nt-copy.copied { color: var(--accent-bright); border-color: rgba(63,185,80,.5); }
+  .nt-copy .cp {
+    position: absolute; bottom: calc(100% + 6px); right: 0;
+    background: #0d1320; border: 1px solid var(--panel-border); border-radius: 6px;
+    padding: 3px 7px; font-size: 10px; color: var(--accent-bright); white-space: nowrap;
+    opacity: 0; transform: translateY(3px); pointer-events: none; transition: .15s;
+  }
+  .nt-copy.copied .cp { opacity: 1; transform: translateY(0); }
+
+  /* ---- Format info modal ---- */
+  .modal {
+    position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center;
+    background: rgba(3,5,10,.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  }
+  .modal[hidden] { display: none; }
+  .modal-card {
+    width: min(450px, calc(100vw - 40px)); max-height: calc(100vh - 80px); overflow: auto; position: relative;
+    background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 18px; padding: 24px 26px;
+    backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: 0 24px 70px rgba(0,0,0,.6); animation: modal-in .18s ease;
+  }
+  @keyframes modal-in { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+  .modal-card h2 { margin: 0 0 12px; font-size: 17px; font-weight: 700; }
+  .modal-card p { margin: 0 0 12px; font-size: 13px; line-height: 1.6; color: var(--text); }
+  .modal-card p.sub { color: var(--text-dim); font-size: 12px; }
+  .modal-card code {
+    background: rgba(255,255,255,.1); padding: 1px 5px; border-radius: 4px;
+    font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px;
+  }
+  .modal-close {
+    position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; border-radius: 9px; cursor: pointer;
+    background: rgba(255,255,255,.06); border: 1px solid var(--panel-border); color: var(--text-dim);
+    font-size: 18px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;
+    transition: color .15s, background .15s;
+  }
+  .modal-close:hover { color: var(--text); background: rgba(255,255,255,.12); }
+  .fmt-table { width: 100%; border-collapse: collapse; margin: 2px 0 16px; font-size: 12.5px; }
+  .fmt-table th, .fmt-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--panel-border); }
+  .fmt-table th { color: var(--text-dim); font-weight: 600; }
+  .modal-card a { color: var(--accent-bright); text-decoration: none; }
+  .modal-card a:hover { text-decoration: underline; }
+  .modal-card .src {
+    margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--panel-border);
+    font-size: 12px; color: var(--text-dim);
+  }
+
   #footer {
     position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 10;
     font-size: 12px; color: var(--text-dim); user-select: none;
@@ -151,9 +256,64 @@
   .scramble-btn:active { transform: scale(.97); }
   .scramble-btn svg { width: 16px; height: 16px; fill: currentColor; }
 
+  /* ---- Custom scramble input ---- */
+  .label .help {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 15px; height: 15px; margin-left: 6px; border-radius: 50%;
+    background: rgba(255,255,255,.08); border: 1px solid var(--panel-border);
+    font-size: 10px; font-weight: 700; color: var(--text-dim); cursor: help;
+    position: relative; vertical-align: middle;
+  }
+  .label .help:hover, .label .help:focus-visible { color: var(--text); outline: none; }
+  .label .help .tip {
+    position: absolute; bottom: calc(100% + 9px); right: -8px; width: 232px;
+    background: #0d1320; border: 1px solid var(--panel-border); border-radius: 10px;
+    padding: 9px 11px; font-size: 11px; font-weight: 400; line-height: 1.5;
+    color: var(--text); letter-spacing: 0; text-transform: none; text-align: left;
+    box-shadow: 0 12px 30px rgba(0,0,0,.5);
+    opacity: 0; transform: translateY(4px); pointer-events: none; transition: .15s; z-index: 20;
+  }
+  .label .help .tip code {
+    background: rgba(255,255,255,.1); padding: 1px 5px; border-radius: 4px;
+    font-family: ui-monospace, Menlo, monospace; font-size: 10.5px;
+  }
+  .label .help .tip::after {
+    content: ''; position: absolute; top: 100%; right: 11px;
+    border: 6px solid transparent; border-top-color: #0d1320;
+  }
+  .label .help:hover .tip, .label .help:focus .tip { opacity: 1; transform: translateY(0); }
+
+  .cs-input { display: flex; gap: 8px; }
+  #customScramble {
+    flex: 1; min-width: 0; height: 38px; padding: 0 12px; border-radius: 10px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--panel-border); color: var(--text);
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 13px;
+    letter-spacing: .5px; transition: border-color .15s, box-shadow .15s;
+  }
+  #customScramble::placeholder { color: var(--text-dim); letter-spacing: .3px; }
+  #customScramble:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(46,160,67,.18); }
+  #customScramble.invalid { border-color: #f85149; box-shadow: 0 0 0 3px rgba(248,81,73,.18); }
+  .cs-apply {
+    flex: 0 0 auto; padding: 0 15px; height: 38px; border-radius: 10px; cursor: pointer;
+    background: var(--accent); color: #fff; border: none; font-size: 13px; font-weight: 600;
+    transition: background .15s, transform .08s, opacity .15s;
+  }
+  .cs-apply:hover { background: var(--accent-bright); }
+  .cs-apply:active { transform: scale(.96); }
+  .cs-apply:disabled { opacity: .4; cursor: not-allowed; }
+  .cs-msg { min-height: 15px; margin-top: 7px; font-size: 11px; line-height: 1.4; }
+  .cs-msg.ok  { color: var(--accent-bright); }
+  .cs-msg.err { color: #ff7b72; }
+  .cs-shake { animation: cs-shake .35s; }
+  @keyframes cs-shake {
+    0%,100% { transform: translateX(0); }
+    20%,60% { transform: translateX(-5px); }
+    40%,80% { transform: translateX(5px); }
+  }
+
   @media (max-width: 640px) {
     #panel { right: 12px; left: 12px; width: auto; top: auto; bottom: 12px; transform: none; padding: 16px; }
-    #hint, #title p, #footer { display: none; }
+    #hint, #title p, #footer, #notation { display: none; }
   }
 </style>
 </head>
@@ -165,6 +325,60 @@
     <p>A scrambled cube, solved with style.</p>
   </div>
   <div id="hint">Drag to orbit · scroll to zoom</div>
+
+  <div id="notation">
+    <div class="nt-head">
+      <span class="nt-title">Singmaster notation</span>
+      <button class="nt-icon" id="ntHelp" aria-label="About move notation" title="About move notation">?</button>
+    </div>
+    <div class="nt-row">
+      <span class="nt-key">Scramble</span>
+      <span class="nt-seq" id="ntScramble"></span>
+      <button class="nt-copy" id="copyScramble" aria-label="Copy scramble" title="Copy scramble">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v12h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>
+        <span class="cp">Copied!</span>
+      </button>
+    </div>
+    <div class="nt-row">
+      <span class="nt-key">Solution</span>
+      <span class="nt-seq" id="ntSolution"></span>
+      <button class="nt-copy" id="copySolution" aria-label="Copy solution" title="Copy solution">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v12h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>
+        <span class="cp">Copied!</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="fmtModal" class="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="fmtTitle">
+      <button class="modal-close" id="fmtClose" aria-label="Close">&times;</button>
+      <h2 id="fmtTitle">Move notation</h2>
+      <p>Moves use <b>Singmaster notation</b>, devised by mathematician David Singmaster and now the basis for the official <abbr title="World Cube Association">WCA</abbr> standard. Each letter is a 90&deg; <b>clockwise</b> turn of one face, judged while looking directly at that face.</p>
+      <table class="fmt-table">
+        <tr><th>Letter</th><th>Face</th></tr>
+        <tr><td><code>R</code> / <code>L</code></td><td>Right / Left</td></tr>
+        <tr><td><code>U</code> / <code>D</code></td><td>Up / Down</td></tr>
+        <tr><td><code>F</code> / <code>B</code></td><td>Front / Back</td></tr>
+      </table>
+      <p>Add a modifier after the letter:</p>
+      <table class="fmt-table">
+        <tr><th>Suffix</th><th>Meaning</th></tr>
+        <tr><td>(none)</td><td>Clockwise quarter turn (e.g. <code>R</code>)</td></tr>
+        <tr><td><code>'</code></td><td>Counter-clockwise quarter turn, "prime" (e.g. <code>R'</code>)</td></tr>
+        <tr><td><code>2</code></td><td>Half turn, 180&deg; (e.g. <code>R2</code>)</td></tr>
+      </table>
+      <p>Beyond the six faces, this visualizer also supports the rest of the standard:</p>
+      <table class="fmt-table">
+        <tr><th>Type</th><th>Moves</th><th>Turns</th></tr>
+        <tr><td>Slices</td><td><code>M</code> <code>E</code> <code>S</code></td><td>The middle layer (M follows L, E follows D, S follows F)</td></tr>
+        <tr><td>Wide</td><td><code>r u f l d b</code><br>or <code>Rw Uw</code>&hellip;</td><td>The face plus its adjacent slice</td></tr>
+        <tr><td>Rotations</td><td><code>x</code> <code>y</code> <code>z</code></td><td>The whole cube (x like R, y like U, z like F)</td></tr>
+      </table>
+      <p>Because every quarter turn has an inverse (<code>R</code> undoes <code>R'</code>), a <b>Scramble</b> applied to a solved cube can always be undone: the <b>Solution</b> is that same sequence reversed with each move inverted.</p>
+      <p class="sub">Tip: paste any algorithm into the Custom scramble box to replay it. Half turns are animated as two quarter turns.</p>
+      <p class="src">Authoritative reference: <a href="https://www.worldcubeassociation.org/regulations/#article-12-notation" target="_blank" rel="noopener noreferrer">WCA Regulations, Article 12: Notation &nearr;</a></p>
+    </div>
+  </div>
 
   <div id="footer">
     <span>Made with <span class="heart">♥</span> and</span>
@@ -232,6 +446,20 @@
         </div>
         <span class="switch"><input type="checkbox" id="rotToggle" checked><span class="slider-sw"></span></span>
       </label>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Custom scramble -->
+    <div class="group" style="margin-bottom:14px;">
+      <div class="label-row">
+        <span class="label">Custom scramble<span class="help" tabindex="0" aria-label="Notation help" role="img">?<span class="tip">Enter face turns <code>R L U D F B</code>, slices <code>M E S</code>, wide turns <code>r u f</code> (or <code>Rw</code>), or rotations <code>x y z</code>. Add <code>'</code> for counter-clockwise or <code>2</code> for a half turn, e.g. <code>R U R' U2 f x'</code>.</span></span></span>
+      </div>
+      <div class="cs-input">
+        <input type="text" id="customScramble" placeholder="e.g. R U R' U2 F" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Custom scramble notation" />
+        <button class="cs-apply" id="applyScramble">Apply</button>
+      </div>
+      <div class="cs-msg" id="customMsg" aria-live="polite"></div>
     </div>
 
     <button class="scramble-btn" id="scramble">
@@ -423,11 +651,80 @@
   // ---------------------------------------------------------------------------
   // Move engine
   // ---------------------------------------------------------------------------
-  // move = { axis:'x'|'y'|'z', layer:-1|1, dir:1|-1 }   (quarter turn)
-  const inverse = (m) => ({ axis: m.axis, layer: m.layer, dir: -m.dir });
+  // move = { axis:'x'|'y'|'z', layers:number[], dir:1|-1 }   (one quarter turn of
+  // one or more layers). layers holds the slice indices (-1, 0, 1) turned together,
+  // so a face is [±1], a slice is [0], a wide turn is two layers, a cube rotation all
+  // three. Rotation is always about the positive axis, by dir * 90°.
+  const inverse = (m) => ({ axis: m.axis, layers: m.layers, dir: -m.dir });
+
+  const FACE_LETTER = { 'x1': 'R', 'x-1': 'L', 'y1': 'U', 'y-1': 'D', 'z1': 'F', 'z-1': 'B' };
+
+  // Each base token maps to an axis, the layers it turns, and `cw`: the dir of a
+  // plain (clockwise / no-prime) quarter turn. Conventions follow the WCA standard:
+  // M follows L, E follows D, S follows F; wide turns add the adjacent slice; and
+  // x/y/z rotate the whole cube the way R/U/F turn.
+  const BASE = {
+    R: { axis: 'x', layers: [1],        cw: -1 }, L: { axis: 'x', layers: [-1],       cw:  1 },
+    U: { axis: 'y', layers: [1],        cw: -1 }, D: { axis: 'y', layers: [-1],       cw:  1 },
+    F: { axis: 'z', layers: [1],        cw: -1 }, B: { axis: 'z', layers: [-1],       cw:  1 },
+    M: { axis: 'x', layers: [0],        cw:  1 }, E: { axis: 'y', layers: [0],        cw:  1 }, S: { axis: 'z', layers: [0], cw: -1 },
+    r: { axis: 'x', layers: [1, 0],     cw: -1 }, l: { axis: 'x', layers: [-1, 0],    cw:  1 },
+    u: { axis: 'y', layers: [1, 0],     cw: -1 }, d: { axis: 'y', layers: [-1, 0],    cw:  1 },
+    f: { axis: 'z', layers: [1, 0],     cw: -1 }, b: { axis: 'z', layers: [-1, 0],    cw:  1 },
+    x: { axis: 'x', layers: [-1, 0, 1], cw: -1 }, y: { axis: 'y', layers: [-1, 0, 1], cw: -1 }, z: { axis: 'z', layers: [-1, 0, 1], cw: -1 },
+  };
+
+  // Reverse of BASE: classify a move back into its canonical letter + clockwise dir.
+  function moveToNotation(m) {
+    const ls = m.layers.slice().sort((a, b) => a - b);
+    const key = ls.join(',');
+    let letter, cw;
+    if (key === '-1,0,1') { letter = m.axis; cw = -1; }                       // x y z
+    else if (key === '0') {                                                   // M E S
+      letter = m.axis === 'x' ? 'M' : m.axis === 'y' ? 'E' : 'S';
+      cw = m.axis === 'z' ? -1 : 1;
+    } else if (ls.length === 2) {                                             // wide r l u d f b
+      const sign = ls.includes(1) ? 1 : -1;
+      letter = FACE_LETTER[m.axis + sign].toLowerCase();
+      cw = -sign;
+    } else {                                                                  // outer face
+      const sign = ls[0];
+      letter = FACE_LETTER[m.axis + sign];
+      cw = -sign;
+    }
+    return letter + (m.dir === cw ? '' : '\u2032');
+  }
+
+  // Parse a notation string into quarter-turn moves. Supports face turns (R L U D F
+  // B), slices (M E S), wide turns (lowercase r l u d f b or WCA Rw…), and cube
+  // rotations (x y z), each with an optional ' (prime) or 2 (half turn). Throws a
+  // friendly Error on anything it can't read.
+  function parseScramble(str) {
+    const clean = (str || '').trim();
+    const help = "Use R L U D F B, slices M E S, wide r u f (or Rw), or rotations x y z, with an optional ' or 2.";
+    if (!clean) throw new Error("Type some moves, e.g. R U R' U2 F");
+    const re = /([RLUDFB])(w?)(['\u2019\u20322]?)|([rludfbMESxyz])(['\u2019\u20322]?)|(\s+)|(.)/g;
+    const moves = [], labels = [];
+    let t;
+    while ((t = re.exec(clean))) {
+      if (t[7] !== undefined) throw new Error(`I don't understand "${t[7]}". ${help}`);
+      if (t[6] !== undefined) continue;
+      let letter, mod;
+      if (t[1] !== undefined) { letter = t[2] ? t[1].toLowerCase() : t[1]; mod = t[3]; }
+      else { letter = t[4]; mod = t[5]; }
+      const base = BASE[letter];
+      if (!base) throw new Error(`"${letter}" isn't a move I know. ${help}`);
+      const make = (dir) => ({ axis: base.axis, layers: base.layers.slice(), dir });
+      if (mod === '2') { moves.push(make(base.cw), make(base.cw)); labels.push(letter + '2'); }
+      else if (mod)    { moves.push(make(-base.cw)); labels.push(letter + '\u2032'); }
+      else             { moves.push(make(base.cw)); labels.push(letter); }
+    }
+    if (!moves.length) throw new Error("Type some moves, e.g. R U R' U2 F");
+    return { moves, label: labels.join(' ') };
+  }
 
   function affectedCubies(move) {
-    return cubies.filter(c => Math.round(c.pos[move.axis]) === move.layer);
+    return cubies.filter(c => move.layers.includes(Math.round(c.pos[move.axis])));
   }
 
   function applyMoveInstant(move) {
@@ -439,37 +736,42 @@
     }
   }
 
-  let scramble = [];     // moves applied to solved cube to scramble it
-  let solveMoves = [];   // moves that take scrambled → solved
-  let currentIndex = 0;  // # of solve moves applied (0 = scrambled, N = solved)
+  let scramble = [];      // moves applied to solved cube to scramble it
+  let scrambleLabel = ''; // pretty notation shown on the Scramble row
+  let solveMoves = [];    // moves that take scrambled → solved
+  let currentIndex = 0;   // # of solve moves applied (0 = scrambled, N = solved)
+  let activeSolve = -1;   // solve move currently being typed/animated (-1 = none)
 
   function randomScramble(len = 25) {
-    const layers = [
-      { axis: 'x', layer:  1 }, { axis: 'x', layer: -1 },
-      { axis: 'y', layer:  1 }, { axis: 'y', layer: -1 },
-      { axis: 'z', layer:  1 }, { axis: 'z', layer: -1 },
-    ];
+    const faces = [['x', 1], ['x', -1], ['y', 1], ['y', -1], ['z', 1], ['z', -1]];
     const seq = [];
     let prev = null;
     for (let i = 0; i < len; i++) {
       let pick;
-      do { pick = layers[(Math.random() * layers.length) | 0]; }
-      while (prev && pick.axis === prev.axis && pick.layer === prev.layer);
+      do { pick = faces[(Math.random() * faces.length) | 0]; }
+      while (prev && pick[0] === prev[0] && pick[1] === prev[1]);
       prev = pick;
-      seq.push({ axis: pick.axis, layer: pick.layer, dir: Math.random() < 0.5 ? 1 : -1 });
+      seq.push({ axis: pick[0], layers: [pick[1]], dir: Math.random() < 0.5 ? 1 : -1 });
     }
     return seq;
   }
 
-  function newScramble() {
+  function setScramble(moves, label) {
     stopPlaying();
     resetToSolved();
-    scramble = randomScramble(25);
+    scramble = moves;
+    scrambleLabel = label != null ? label : moves.map(moveToNotation).join(' ');
     for (const m of scramble) applyMoveInstant(m);
     solveMoves = scramble.slice().reverse().map(inverse);
     currentIndex = 0;
+    activeSolve = -1;
     renderFromModel();
+    renderScrambleNotation();
     updateUI();
+  }
+
+  function newScramble() {
+    setScramble(randomScramble(25));
   }
 
   // ---------------------------------------------------------------------------
@@ -514,8 +816,11 @@
     if (animating || currentIndex >= solveMoves.length) return false;
     const move = solveMoves[currentIndex];
     const base = currentIndex;
+    activeSolve = currentIndex;
+    updateNotation();
     animateMove(move, base, 1, () => {
       currentIndex++;
+      activeSolve = -1;
       updateUI();
       if (pendingScrub !== null) { const t = pendingScrub; pendingScrub = null; scrubTo(t); }
       else if (playing) { if (!stepForward()) stopPlaying(); }
@@ -529,6 +834,7 @@
     const base = currentIndex;
     animateMove(move, base, -1, () => {
       currentIndex--;
+      activeSolve = -1;
       updateUI();
       if (pendingScrub !== null) { const t = pendingScrub; pendingScrub = null; scrubTo(t); }
     });
@@ -559,6 +865,8 @@
   const speedVal  = document.getElementById('speedVal');
   const timeline  = document.getElementById('timeline');
   const counter   = document.getElementById('counter');
+  const ntScramble = document.getElementById('ntScramble');
+  const ntSolution = document.getElementById('ntSolution');
   const ppIcon    = document.getElementById('ppIcon');
   const PLAY_PATH  = 'M8 5v14l11-7z';
   const PAUSE_PATH = 'M6 5h4v14H6zm8 0h4v14h-4z';
@@ -572,6 +880,24 @@
     speedVal.textContent = SPEED_LABELS[v - 1];
   }
 
+  function renderScrambleNotation() {
+    ntScramble.textContent = scrambleLabel;
+  }
+
+  // Reveals the solution one move at a time as it animates: tokens up to the
+  // current index are kept, plus the move currently being "typed" with a caret.
+  function updateNotation() {
+    const shown = Math.max(currentIndex, activeSolve + 1);
+    const parts = [];
+    for (let i = 0; i < shown; i++) {
+      const cls = i === activeSolve ? 'nt-move active' : 'nt-move nt-done';
+      parts.push(`<span class="${cls}">${moveToNotation(solveMoves[i])}</span>`);
+    }
+    let html = parts.join(' ');
+    if (currentIndex < solveMoves.length) html += '<span class="nt-caret"></span>';
+    ntSolution.innerHTML = html;
+  }
+
   function updateUI() {
     timeline.max = solveMoves.length;
     if (!animating) timeline.value = currentIndex;
@@ -579,6 +905,7 @@
       ? 'Solved ✨'
       : `Move ${currentIndex} / ${solveMoves.length}`;
     updatePlayIcon();
+    updateNotation();
   }
 
   speed.addEventListener('input', applySpeed);
@@ -594,6 +921,87 @@
   document.getElementById('toStart').addEventListener('click', () => { stopPlaying(); scrubTo(0); });
   document.getElementById('toEnd').addEventListener('click', () => { stopPlaying(); scrubTo(solveMoves.length); });
   document.getElementById('scramble').addEventListener('click', newScramble);
+
+  // ---- Custom scramble input ----
+  const customInput = document.getElementById('customScramble');
+  const customMsg   = document.getElementById('customMsg');
+  const applyBtn    = document.getElementById('applyScramble');
+
+  function setMsg(text, kind) {
+    customMsg.textContent = text || '';
+    customMsg.className = 'cs-msg' + (kind ? ' ' + kind : '');
+  }
+
+  function validateCustom() {
+    const raw = customInput.value;
+    if (!raw.trim()) {
+      customInput.classList.remove('invalid');
+      setMsg('', null);
+      applyBtn.disabled = false;
+      return null;
+    }
+    try {
+      const parsed = parseScramble(raw);
+      customInput.classList.remove('invalid');
+      setMsg(`Looks good — ${parsed.moves.length} move${parsed.moves.length === 1 ? '' : 's'} ready`, 'ok');
+      applyBtn.disabled = false;
+      return parsed;
+    } catch (err) {
+      customInput.classList.add('invalid');
+      setMsg(err.message, 'err');
+      applyBtn.disabled = true;
+      return null;
+    }
+  }
+
+  function applyCustom() {
+    let parsed;
+    try {
+      parsed = parseScramble(customInput.value);
+    } catch (err) {
+      customInput.classList.add('invalid');
+      setMsg(err.message, 'err');
+      customInput.classList.remove('cs-shake');
+      void customInput.offsetWidth;
+      customInput.classList.add('cs-shake');
+      return;
+    }
+    setScramble(parsed.moves, parsed.label);
+    setMsg(`Applied ${parsed.moves.length} move${parsed.moves.length === 1 ? '' : 's'} — press play to solve`, 'ok');
+  }
+
+  customInput.addEventListener('input', validateCustom);
+  customInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyCustom(); } });
+  applyBtn.addEventListener('click', applyCustom);
+
+  // ---- Copy buttons + format modal ----
+  async function copyText(text, btn) {
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } finally { ta.remove(); }
+    }
+    btn.classList.add('copied');
+    clearTimeout(btn._cpTimer);
+    btn._cpTimer = setTimeout(() => btn.classList.remove('copied'), 1300);
+  }
+
+  document.getElementById('copyScramble').addEventListener('click', (e) =>
+    copyText(scrambleLabel, e.currentTarget));
+  document.getElementById('copySolution').addEventListener('click', (e) =>
+    copyText(solveMoves.map(moveToNotation).join(' '), e.currentTarget));
+
+  const fmtModal = document.getElementById('fmtModal');
+  const openFmt  = () => { fmtModal.hidden = false; };
+  const closeFmt = () => { fmtModal.hidden = true; };
+  document.getElementById('ntHelp').addEventListener('click', openFmt);
+  document.getElementById('fmtClose').addEventListener('click', closeFmt);
+  fmtModal.addEventListener('click', (e) => { if (e.target === fmtModal) closeFmt(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !fmtModal.hidden) closeFmt(); });
 
   document.getElementById('ghToggle').addEventListener('change', (e) => {
     palette = e.target.checked ? GITHUB : CLASSIC;
