@@ -1,6 +1,6 @@
 # Rubik's Rubrics
 
-A stunning, self-contained 3D Rubik's Cube visualizer and solver. A scrambled cube appears,
+A stunning (if I do say so myself), self-contained 3D Rubik's Cube visualizer and solver. A scrambled cube appears,
 then solves itself with smooth, eased layer-turn animations... and you control the show.
 
 **▶ Live demo:** https://leereilly.net/rubiks-rubriks/
@@ -47,4 +47,4 @@ python3 -m http.server 8000
 
 ---
 
-Made with ♥ and <img src="https://github.githubassets.com/images/icons/emoji/copilot.png" alt="GitHub Copilot" width="14" height="14" align="center"> [GitHub Copilot](https://github.com/features/copilot) and open source on <img src="https://github.githubassets.com/favicons/favicon-dark.png" alt="GitHub" width="14" height="14" align="center"> [GitHub](https://github.com/leereilly/rubiks-rubriks) by [@leereilly](https://github.com/leereilly).
+Made with ♥ and [GitHub Copilot](https://github.com/features/copilot) and Claude Opus 4.8 · max :metal:
