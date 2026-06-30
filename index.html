@@ -568,11 +568,34 @@
     border-left: 2px solid rgba(63,185,80,.35); padding: 1px 0 1px 10px;
   }
   .coach-why-body b { color: var(--text); }
-  .coach-why-body code {
+  .coach-why-body code, .coach-key-note code {
     font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
     font-size: 11px; color: var(--accent-bright); background: rgba(46,160,67,.12);
     border-radius: 5px; padding: 1px 4px;
   }
+  /* Always-available move-notation key (collapsed by default). */
+  .coach-key { margin: 0 0 12px; }
+  .coach-key > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; color: var(--text-dim); padding: 2px 0;
+  }
+  .coach-key > summary:hover { color: var(--text); }
+  .coach-key > summary::-webkit-details-marker { display: none; }
+  .coach-key > summary::after {
+    content: "\203A"; font-size: 14px; color: var(--text-dim); transition: transform .15s ease;
+  }
+  .coach-key[open] > summary::after { transform: rotate(90deg); }
+  .coach-key-grid {
+    margin-top: 8px; display: grid; grid-template-columns: auto 1fr; gap: 5px 12px;
+    align-items: baseline; font-size: 11px; line-height: 1.4; color: var(--text-dim);
+  }
+  .coach-key-grid b {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    color: var(--accent-bright); font-weight: 700; white-space: nowrap;
+  }
+  .coach-key-note { margin: 9px 0 0; font-size: 11px; line-height: 1.5; color: var(--text-dim); }
+  .coach-key-note b { color: var(--text); }
 
   .coach-controls { display: flex; gap: 8px; margin-bottom: 11px; flex-wrap: wrap; }
   .coach-btn {
@@ -1207,6 +1230,17 @@
     <div class="coach-chips" id="coachChips" aria-label="Stage progress"></div>
     <p class="coach-blurb" id="coachBlurb"></p>
     <div class="coach-alg" id="coachAlg"></div>
+    <details class="coach-key">
+      <summary>Move notation key</summary>
+      <div class="coach-key-grid">
+        <b>R&nbsp;L</b><span>Right / Left face</span>
+        <b>U&nbsp;D</b><span>Up (top) / Down (bottom) face</span>
+        <b>F&nbsp;B</b><span>Front / Back face</span>
+        <b>&#8242;</b><span>turn that face anticlockwise</span>
+        <b>2</b><span>turn that face twice (180&deg;)</span>
+      </div>
+      <p class="coach-key-note">A plain letter is a quarter-turn <b>clockwise</b>, judged while looking straight at that face. <code>x y z</code> rotate the whole cube.</p>
+    </details>
     <div class="coach-controls">
       <button class="coach-btn" id="coachBack" aria-label="Previous move">&#8592; Back</button>
       <button class="coach-btn primary" id="coachNext" aria-label="Next move">Next move &#8594;</button>
@@ -3337,7 +3371,7 @@
         fn(ref);
         stages.push({ key, name, blurb, algName, tip: tip || '', tokens: ref.stageMoves.slice() });
       };
-      run('orient', 'Get ready', 'Hold the cube so the WHITE centre is on the bottom and the YELLOW centre is on top. We turn it over for you on screen, so do the same with your cube.', 'x2', (r) => rec(r, 'x2'));
+      run('orient', 'Get ready', 'Hold the cube with the WHITE centre on the bottom and YELLOW on top. The face pointing at you is the Front, the side on your right is Right, and the top is Up \u2014 keep this same grip for the whole solve. We flip it on screen for you, so match it with your cube.', 'x2', (r) => rec(r, 'x2'));
       run('cross', 'White cross', 'Build a white plus on the bottom: four white edges around the white centre, each side colour matching its neighbouring centre.', 'Intuitive', whiteCross,
         'No fixed algorithm here \u2014 it\u2019s done by eye. Find a white edge, spin the top (U) until it sits above the centre its <b>other</b> colour matches, then turn that face twice (e.g. <code>F2</code>) to drop it into the cross. A matched edge has white on the bottom <b>and</b> its side colour lined up with the centre.');
       run('corners', 'White corners', 'Drop the four white corners into the bottom layer to finish the first layer, using the R U R\u2032 \u201Cinsert\u201D trigger.', "R U R'  /  R U' R'", firstLayerCorners,
